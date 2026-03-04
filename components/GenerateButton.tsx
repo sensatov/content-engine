@@ -19,7 +19,7 @@ export function GenerateButton({
         type="button"
         onClick={onGenerate}
         disabled={disabled || loading}
-        className="w-full rounded py-3 font-medium text-white transition-all disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/40 enabled:bg-gradient-to-r enabled:from-accent enabled:to-accent/80 enabled:hover:opacity-95"
+        className="w-full rounded py-3 font-medium text-white transition-all disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 enabled:bg-accent enabled:hover:opacity-90"
       >
         {loading ? (
           <span className="flex items-center justify-center gap-2">
@@ -51,7 +51,7 @@ export function GenerateButton({
         )}
       </button>
       {disabled && missingRequirements.length > 0 && (
-        <p className="mt-2 text-center text-sm text-white/50">
+        <p className="mt-2 text-center text-sm text-optidge-text-muted">
           Add: {missingRequirements.join(", ")}
         </p>
       )}

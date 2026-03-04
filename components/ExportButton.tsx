@@ -54,7 +54,7 @@ export function ExportButton({ topics }: Props) {
     <button
       type="button"
       onClick={download}
-      className="rounded border border-accent/50 bg-accent/10 px-4 py-2 text-sm font-medium text-accent transition-colors hover:bg-accent/20"
+      className="rounded border border-accent bg-optidge-green-soft px-4 py-2 text-sm font-medium text-optidge-text transition-colors hover:bg-optidge-green-pale"
     >
       Export to CSV
     </button>

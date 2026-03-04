@@ -87,8 +87,8 @@ function Dropzone({
 
   return (
     <div
-      className={`relative rounded-lg border border-dashed border-white/20 bg-black/20 p-4 transition-colors ${
-        dragging ? "border-accent/50 bg-accent/5" : "hover:border-white/30"
+      className={`relative rounded-lg border border-dashed border-gray-300 bg-optidge-green-pale/30 p-4 transition-colors ${
+        dragging ? "border-accent bg-optidge-green-soft/50" : "hover:border-accent/50"
       }`}
       onDragOver={(e) => {
         e.preventDefault();
@@ -104,8 +104,8 @@ function Dropzone({
     >
       <label htmlFor={inputId} className="cursor-pointer">
         <span className="text-2xl">{config.icon}</span>
-        <p className="mt-1 font-mono text-xs font-medium text-white/80">{config.label}</p>
-        <p className="mt-0.5 text-xs text-white/50">{config.description}</p>
+        <p className="mt-1 font-mono text-xs font-medium text-optidge-text">{config.label}</p>
+        <p className="mt-0.5 text-xs text-optidge-text-muted">{config.description}</p>
         <input
           id={inputId}
           type="file"
@@ -122,12 +122,12 @@ function Dropzone({
       {files.length > 0 && (
         <ul className="mt-2 space-y-1">
           {files.map((f) => (
-            <li key={f.name + f.size} className="flex items-center justify-between text-xs text-white/70">
+            <li key={f.name + f.size} className="flex items-center justify-between text-xs text-optidge-text-muted">
               <span className="truncate">{f.name}</span>
               <button
                 type="button"
                 onClick={() => onFilesChange(files.filter((x) => x !== f))}
-                className="text-white/50 hover:text-red-400"
+                className="text-optidge-text-muted hover:text-red-600"
                 aria-label={`Remove ${f.name}`}
               >
                 ×
@@ -166,7 +166,7 @@ export function FileUpload({ state, onChange }: Props) {
   );
 
   return (
-    <section className="rounded-lg border border-white/10 bg-white/[0.02] p-6 transition-colors hover:border-accent/30">
+    <section className="rounded-lg border border-gray-200 bg-optidge-green-pale/50 p-6 transition-colors hover:border-accent/40">
       <p className="section-label font-mono mb-4">03 — Data Upload</p>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {SLOTS.map((config) => (

@@ -33,13 +33,13 @@ export function TopicFilters({ topics, filter, onFilterChange }: Props) {
   return (
     <div className="flex flex-wrap items-center gap-4">
       <div className="flex items-center gap-2">
-        <span className="font-mono text-xs text-white/50">Pillar</span>
+        <span className="font-mono text-xs text-optidge-text-muted">Pillar</span>
         <select
           value={filter.pillar}
           onChange={(e) =>
             onFilterChange({ ...filter, pillar: e.target.value })
           }
-          className="rounded border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-accent"
+          className="rounded border border-gray-200 bg-white px-2 py-1.5 text-sm text-optidge-text outline-none focus:border-accent"
         >
           <option value="">All</option>
           {pillars.map((p) => (
@@ -50,13 +50,13 @@ export function TopicFilters({ topics, filter, onFilterChange }: Props) {
         </select>
       </div>
       <div className="flex items-center gap-2">
-        <span className="font-mono text-xs text-white/50">Priority</span>
+        <span className="font-mono text-xs text-optidge-text-muted">Priority</span>
         <select
           value={filter.priority}
           onChange={(e) =>
             onFilterChange({ ...filter, priority: e.target.value })
           }
-          className="rounded border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-accent"
+          className="rounded border border-gray-200 bg-white px-2 py-1.5 text-sm text-optidge-text outline-none focus:border-accent"
         >
           <option value="">All</option>
           {PRIORITIES.map((p) => (
@@ -67,13 +67,13 @@ export function TopicFilters({ topics, filter, onFilterChange }: Props) {
         </select>
       </div>
       <div className="flex items-center gap-2">
-        <span className="font-mono text-xs text-white/50">Content type</span>
+        <span className="font-mono text-xs text-optidge-text-muted">Content type</span>
         <select
           value={filter.contentType}
           onChange={(e) =>
             onFilterChange({ ...filter, contentType: e.target.value })
           }
-          className="rounded border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-accent"
+          className="rounded border border-gray-200 bg-white px-2 py-1.5 text-sm text-optidge-text outline-none focus:border-accent"
         >
           <option value="">All</option>
           {contentTypes.map((c) => (
@@ -84,7 +84,7 @@ export function TopicFilters({ topics, filter, onFilterChange }: Props) {
         </select>
       </div>
       <div className="flex items-center gap-2">
-        <span className="font-mono text-xs text-white/50">Sort by</span>
+        <span className="font-mono text-xs text-optidge-text-muted">Sort by</span>
         <select
           value={filter.sortBy}
           onChange={(e) =>
@@ -93,7 +93,7 @@ export function TopicFilters({ topics, filter, onFilterChange }: Props) {
               sortBy: e.target.value as FilterState["sortBy"],
             })
           }
-          className="rounded border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-accent"
+          className="rounded border border-gray-200 bg-white px-2 py-1.5 text-sm text-optidge-text outline-none focus:border-accent"
         >
           {SORT_OPTIONS.map((o) => (
             <option key={o.value} value={o.value}>

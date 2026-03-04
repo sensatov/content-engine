@@ -115,16 +115,16 @@ export default function ContentEnginePage() {
   return (
     <Providers>
       <div className="min-h-screen bg-background">
-        <header className="border-b border-white/10 px-6 py-4">
+        <header className="border-b border-gray-200 bg-optidge-green-pale/50 px-6 py-4">
           <div className="mx-auto flex max-w-4xl items-center justify-between">
-            <h1 className="font-mono text-lg font-medium tracking-tight text-white">
+            <h1 className="font-mono text-lg font-medium tracking-tight text-optidge-text">
               ContentEngine
             </h1>
             {view === "results" && (
               <button
                 type="button"
                 onClick={() => setView("config")}
-                className="text-sm text-white/70 hover:text-accent"
+                className="text-sm text-optidge-text-muted hover:text-accent"
               >
                 ← New Analysis
               </button>
@@ -143,7 +143,7 @@ export default function ContentEnginePage() {
                 <FileUpload state={fileUpload} onChange={setFileUpload} />
               </div>
               <div className="mt-6">
-                <section className="rounded-lg border border-white/10 bg-white/[0.02] p-6 transition-colors hover:border-accent/30">
+                <section className="rounded-lg border border-gray-200 bg-optidge-green-pale/50 p-6 transition-colors hover:border-accent/40">
                   <p className="section-label font-mono mb-4">
                     04 — Additional Context (Optional)
                   </p>
@@ -152,12 +152,12 @@ export default function ContentEnginePage() {
                     value={additionalContext}
                     onChange={(e) => setAdditionalContext(e.target.value)}
                     rows={4}
-                    className="w-full rounded border border-white/10 bg-black/30 px-3 py-2 text-white placeholder-white/40 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/50"
+                    className="w-full rounded border border-gray-200 bg-white px-3 py-2 text-optidge-text placeholder-gray-400 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/50"
                   />
                 </section>
               </div>
               {error && (
-                <div className="mt-4 rounded border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300">
+                <div className="mt-4 rounded border border-red-200 bg-red-50 p-4 text-sm text-red-700">
                   {error}
                   <span className="ml-2 inline-flex gap-2">
                     <button
@@ -189,26 +189,26 @@ export default function ContentEnginePage() {
           {view === "results" && result && (
             <>
               <ResultsSummary dataSummary={result.dataSummary} />
-              <div className="mt-6 flex flex-wrap gap-4 rounded-lg border border-white/10 bg-white/[0.02] p-4">
-                <div className="text-green-400">
-                  <span className="font-mono text-xs text-white/50">High</span>{" "}
+              <div className="mt-6 flex flex-wrap gap-4 rounded-lg border border-gray-200 bg-optidge-green-pale/30 p-4">
+                <div className="text-green-700">
+                  <span className="font-mono text-xs text-optidge-text-muted">High</span>{" "}
                   {highCount}
                 </div>
-                <div className="text-amber-400">
-                  <span className="font-mono text-xs text-white/50">Medium</span>{" "}
+                <div className="text-amber-700">
+                  <span className="font-mono text-xs text-optidge-text-muted">Medium</span>{" "}
                   {mediumCount}
                 </div>
-                <div className="text-white/50">
-                  <span className="font-mono text-xs text-white/50">Low</span>{" "}
+                <div className="text-optidge-text-muted">
+                  <span className="font-mono text-xs text-optidge-text-muted">Low</span>{" "}
                   {lowCount}
                 </div>
-                <div className="text-accent">
-                  <span className="font-mono text-xs text-white/50">Total</span>{" "}
+                <div className="text-accent font-medium">
+                  <span className="font-mono text-xs text-optidge-text-muted">Total</span>{" "}
                   {topics.length}
                 </div>
                 {Object.entries(typeCounts).map(([type, count]) => (
-                  <div key={type} className="text-white/70">
-                    <span className="font-mono text-xs text-white/50">{type}</span>{" "}
+                  <div key={type} className="text-optidge-text">
+                    <span className="font-mono text-xs text-optidge-text-muted">{type}</span>{" "}
                     {count}
                   </div>
                 ))}
@@ -232,7 +232,7 @@ export default function ContentEnginePage() {
           )}
 
           {view === "results" && !result && (
-            <p className="text-white/60">No results to show.</p>
+            <p className="text-optidge-text-muted">No results to show.</p>
           )}
         </main>
       </div>

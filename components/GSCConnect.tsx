@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 type GSCState = {
@@ -104,14 +104,33 @@ export function GSCConnect({ onDataLoaded }: GSCConnectProps) {
       });
   }, [state.siteUrl, state.periodA, state.periodB, state.rowLimit, onDataLoaded]);
 
+  const [propertyOpen, setPropertyOpen] = useState(false);
+  const [propertyQuery, setPropertyQuery] = useState("");
+  const propertyRef = useRef<HTMLDivElement>(null);
+  const filteredProperties = propertyQuery.trim()
+    ? properties.filter((url) =>
+        url.toLowerCase().includes(propertyQuery.toLowerCase())
+      )
+    : properties;
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (propertyRef.current && !propertyRef.current.contains(e.target as Node)) {
+        setPropertyOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   if (status === "loading" || status === "unauthenticated") {
     return (
-      <section className="rounded-lg border border-white/10 bg-white/[0.02] p-6 transition-colors hover:border-accent/30">
+      <section className="rounded-lg border border-gray-200 bg-optidge-green-pale/50 p-6 transition-colors hover:border-accent/40">
         <p className="section-label font-mono mb-4">02 — Google Search Console</p>
         <button
           type="button"
           onClick={() => signIn("google")}
-          className="rounded bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent hover:text-white"
+          className="rounded bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:opacity-90"
         >
           Connect Google Search Console
         </button>
@@ -120,42 +139,82 @@ export function GSCConnect({ onDataLoaded }: GSCConnectProps) {
   }
 
   return (
-    <section className="rounded-lg border border-white/10 bg-white/[0.02] p-6 transition-colors hover:border-accent/30">
+    <section className="rounded-lg border border-gray-200 bg-optidge-green-pale/50 p-6 transition-colors hover:border-accent/40">
       <p className="section-label font-mono mb-4">02 — Google Search Console</p>
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm text-white/70">Connected as {session?.user?.email}</span>
+        <span className="text-sm text-optidge-text-muted">Connected as {session?.user?.email}</span>
         <button
           type="button"
           onClick={() => signOut()}
-          className="text-xs text-white/50 underline hover:text-white/80"
+          className="text-xs text-optidge-text-muted underline hover:text-optidge-text"
         >
           Disconnect
         </button>
       </div>
       {propsLoading ? (
-        <p className="mt-2 text-sm text-white/50">Loading properties…</p>
+        <p className="mt-2 text-sm text-optidge-text-muted">Loading properties…</p>
       ) : (
         <div className="mt-4 space-y-4">
-          <div>
-            <label className="mb-1.5 block font-mono text-xs text-white/60">
+          <div ref={propertyRef} className="relative max-w-md">
+            <label className="mb-1.5 block font-mono text-xs text-optidge-text-muted">
               Property
             </label>
-            <select
-              value={state.siteUrl}
-              onChange={(e) => setState((s) => ({ ...s, siteUrl: e.target.value }))}
-              className="w-full max-w-md rounded border border-white/10 bg-black/30 px-3 py-2 text-white outline-none focus:border-accent focus:ring-1 focus:ring-accent/50"
-            >
-              <option value="">Select a property</option>
-              {properties.map((url) => (
-                <option key={url} value={url}>
-                  {url}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <input
+                type="text"
+                value={propertyOpen ? propertyQuery : state.siteUrl}
+                onChange={(e) => {
+                  setPropertyQuery(e.target.value);
+                  if (!propertyOpen) setPropertyOpen(true);
+                }}
+                onFocus={() => {
+                  setPropertyOpen(true);
+                  setPropertyQuery(state.siteUrl);
+                }}
+                placeholder="Type to search properties…"
+                className="w-full rounded border border-gray-200 bg-white px-3 py-2 pr-8 text-optidge-text placeholder-gray-400 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/50"
+              />
+              <span
+                className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-400"
+                aria-hidden
+              >
+                {propertyOpen ? "▲" : "▼"}
+              </span>
+            </div>
+            {propertyOpen && (
+              <ul
+                className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded border border-gray-200 bg-white py-1 shadow-lg"
+                role="listbox"
+              >
+                {filteredProperties.length === 0 ? (
+                  <li className="px-3 py-2 text-sm text-optidge-text-muted">
+                    No properties match
+                  </li>
+                ) : (
+                  filteredProperties.map((url) => (
+                    <li
+                      key={url}
+                      role="option"
+                      aria-selected={state.siteUrl === url}
+                      onClick={() => {
+                        setState((s) => ({ ...s, siteUrl: url }));
+                        setPropertyQuery("");
+                        setPropertyOpen(false);
+                      }}
+                      className={`cursor-pointer px-3 py-2 text-sm hover:bg-optidge-green-pale ${
+                        state.siteUrl === url ? "bg-optidge-green-soft text-optidge-text" : "text-optidge-text"
+                      }`}
+                    >
+                      {url}
+                    </li>
+                  ))
+                )}
+              </ul>
+            )}
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block font-mono text-xs text-white/60">
+              <label className="mb-1.5 block font-mono text-xs text-optidge-text-muted">
                 Period A
               </label>
               <div className="flex gap-2">
@@ -168,7 +227,7 @@ export function GSCConnect({ onDataLoaded }: GSCConnectProps) {
                       periodA: { ...s.periodA, startDate: e.target.value },
                     }))
                   }
-                  className="flex-1 rounded border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-accent"
+                  className="flex-1 rounded border border-gray-200 bg-white px-2 py-1.5 text-sm text-optidge-text outline-none focus:border-accent"
                 />
                 <input
                   type="date"
@@ -179,12 +238,12 @@ export function GSCConnect({ onDataLoaded }: GSCConnectProps) {
                       periodA: { ...s.periodA, endDate: e.target.value },
                     }))
                   }
-                  className="flex-1 rounded border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-accent"
+                  className="flex-1 rounded border border-gray-200 bg-white px-2 py-1.5 text-sm text-optidge-text outline-none focus:border-accent"
                 />
               </div>
             </div>
             <div>
-              <label className="mb-1.5 block font-mono text-xs text-white/60">
+              <label className="mb-1.5 block font-mono text-xs text-optidge-text-muted">
                 Period B
               </label>
               <div className="flex gap-2">
@@ -197,7 +256,7 @@ export function GSCConnect({ onDataLoaded }: GSCConnectProps) {
                       periodB: { ...s.periodB, startDate: e.target.value },
                     }))
                   }
-                  className="flex-1 rounded border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-accent"
+                  className="flex-1 rounded border border-gray-200 bg-white px-2 py-1.5 text-sm text-optidge-text outline-none focus:border-accent"
                 />
                 <input
                   type="date"
@@ -208,7 +267,7 @@ export function GSCConnect({ onDataLoaded }: GSCConnectProps) {
                       periodB: { ...s.periodB, endDate: e.target.value },
                     }))
                   }
-                  className="flex-1 rounded border border-white/10 bg-black/30 px-2 py-1.5 text-sm text-white outline-none focus:border-accent"
+                  className="flex-1 rounded border border-gray-200 bg-white px-2 py-1.5 text-sm text-optidge-text outline-none focus:border-accent"
                 />
               </div>
             </div>
@@ -223,13 +282,13 @@ export function GSCConnect({ onDataLoaded }: GSCConnectProps) {
               {state.loading ? "Pulling…" : "Pull Data"}
             </button>
             {state.formattedData != null && state.rowCount != null && (
-              <span className="flex items-center gap-1.5 text-sm text-green-400">
+              <span className="flex items-center gap-1.5 text-sm text-green-600">
                 <span aria-hidden>✓</span> GSC data loaded — {state.rowCount} rows
               </span>
             )}
           </div>
           {state.error && (
-            <p className="text-sm text-red-400">{state.error}</p>
+            <p className="text-sm text-red-600">{state.error}</p>
           )}
         </div>
       )}

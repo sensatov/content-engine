@@ -65,20 +65,20 @@ export function ClientConfig({ value, onChange }: Props) {
   ).slice(0, 6);
 
   return (
-    <section className="rounded-lg border border-white/10 bg-white/[0.02] p-6 transition-colors hover:border-accent/30">
+    <section className="rounded-lg border border-gray-200 bg-optidge-green-pale/50 p-6 transition-colors hover:border-accent/40">
       <p className="section-label font-mono mb-4">01 — Client Configuration</p>
       <div className="mb-4">
-        <label className="mb-1.5 block font-mono text-xs text-white/60">
+        <label className="mb-1.5 block font-mono text-xs text-optidge-text-muted">
           Client type
         </label>
-        <div className="flex gap-0 rounded border border-white/10 bg-black/30 p-0.5">
+        <div className="flex gap-0 rounded border border-gray-200 bg-gray-100 p-0.5">
           <button
             type="button"
             onClick={() => onChange({ ...value, clientType: "non-ecommerce" })}
             className={`flex-1 rounded px-3 py-2 font-mono text-sm transition-colors ${
               value.clientType === "non-ecommerce"
-                ? "bg-white/10 text-accent"
-                : "text-white/60 hover:text-white/80"
+                ? "bg-white text-accent shadow-sm"
+                : "text-optidge-text-muted hover:text-optidge-text"
             }`}
           >
             Non-ecommerce
@@ -88,20 +88,20 @@ export function ClientConfig({ value, onChange }: Props) {
             onClick={() => onChange({ ...value, clientType: "ecommerce" })}
             className={`flex-1 rounded px-3 py-2 font-mono text-sm transition-colors ${
               value.clientType === "ecommerce"
-                ? "bg-white/10 text-accent"
-                : "text-white/60 hover:text-white/80"
+                ? "bg-white text-accent shadow-sm"
+                : "text-optidge-text-muted hover:text-optidge-text"
             }`}
           >
             E-commerce
           </button>
         </div>
-        <p className="mt-1 text-xs text-white/50">
+        <p className="mt-1 text-xs text-optidge-text-muted">
           E-commerce clients get Collection Page suggestions for commercial intent where relevant.
         </p>
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block font-mono text-xs text-white/60">
+          <label className="mb-1.5 block font-mono text-xs text-optidge-text-muted">
             Client Name <span className="text-accent">*</span>
           </label>
           <input
@@ -109,11 +109,11 @@ export function ClientConfig({ value, onChange }: Props) {
             placeholder="e.g. Acme Corp"
             value={value.clientName}
             onChange={(e) => onChange({ ...value, clientName: e.target.value })}
-            className="w-full rounded border border-white/10 bg-black/30 px-3 py-2 text-white placeholder-white/40 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/50"
+            className="w-full rounded border border-gray-200 bg-white px-3 py-2 text-optidge-text placeholder-gray-400 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/50"
           />
         </div>
         <div>
-          <label className="mb-1.5 block font-mono text-xs text-white/60">
+          <label className="mb-1.5 block font-mono text-xs text-optidge-text-muted">
             Website URL
           </label>
           <input
@@ -121,12 +121,12 @@ export function ClientConfig({ value, onChange }: Props) {
             placeholder="e.g. acmecorp.com"
             value={value.clientUrl}
             onChange={(e) => onChange({ ...value, clientUrl: e.target.value })}
-            className="w-full rounded border border-white/10 bg-black/30 px-3 py-2 text-white placeholder-white/40 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/50"
+            className="w-full rounded border border-gray-200 bg-white px-3 py-2 text-optidge-text placeholder-gray-400 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/50"
           />
         </div>
       </div>
       <div className="mt-4">
-        <label className="mb-1.5 block font-mono text-xs text-white/60">
+        <label className="mb-1.5 block font-mono text-xs text-optidge-text-muted">
           Service Pillars
         </label>
         <input
@@ -135,20 +135,20 @@ export function ClientConfig({ value, onChange }: Props) {
           value={pillarInput}
           onChange={(e) => setPillarInput(e.target.value)}
           onKeyDown={onPillarKeyDown}
-          className="w-full rounded border border-white/10 bg-black/30 px-3 py-2 text-white placeholder-white/40 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/50"
+          className="w-full rounded border border-gray-200 bg-white px-3 py-2 text-optidge-text placeholder-gray-400 outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-accent/50"
         />
         {value.pillars.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-2">
             {value.pillars.map((p, i) => (
               <span
                 key={p}
-                className="inline-flex items-center gap-1 rounded bg-accent/20 px-2 py-1 font-mono text-sm text-accent"
+                className="inline-flex items-center gap-1 rounded bg-optidge-green-soft px-2 py-1 font-mono text-sm text-optidge-text"
               >
                 {p}
                 <button
                   type="button"
                   onClick={() => removePillar(i)}
-                  className="text-white/70 hover:text-white"
+                  className="text-optidge-text-muted hover:text-optidge-text"
                   aria-label={`Remove ${p}`}
                 >
                   ×
@@ -164,7 +164,7 @@ export function ClientConfig({ value, onChange }: Props) {
                 key={s}
                 type="button"
                 onClick={() => addPillar(s)}
-                className="rounded border border-white/20 bg-white/5 px-2 py-1 font-mono text-xs text-white/80 transition-colors hover:border-accent/50 hover:bg-accent/10 hover:text-accent"
+                className="rounded border border-gray-300 bg-white px-2 py-1 font-mono text-xs text-optidge-text-muted transition-colors hover:border-accent/50 hover:bg-optidge-green-pale hover:text-accent"
               >
                 {s}
               </button>
