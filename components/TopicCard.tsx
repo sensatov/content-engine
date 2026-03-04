@@ -49,6 +49,11 @@ export function TopicCard({ topic, index }: Props) {
             <span className="rounded border border-white/20 bg-white/5 px-2 py-0.5 font-mono text-xs text-white/70">
               {topic.contentType}
             </span>
+            {topic.optimizationOpportunity && (
+              <span className="rounded border border-accent/50 bg-accent/15 px-2 py-0.5 font-mono text-xs text-accent">
+                Optimization
+              </span>
+            )}
           </div>
           <h3 className="mt-2 font-semibold text-white">{topic.title}</h3>
           <p className="mt-1 text-sm text-white/60 line-clamp-2">{topic.rationale}</p>

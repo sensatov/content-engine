@@ -38,6 +38,8 @@ RULES:
 - Vary content types: include blog posts, landing pages, long-form guides, comparison pages, FAQ pages, tool/calculator pages where appropriate.
 - Consider search intent for each topic: informational, commercial, transactional, navigational.
 - Be specific with titles — not "SEO Guide" but "Technical SEO Audit Checklist for E-Commerce Sites: 47-Point Guide"
+- When the client is E-COMMERCE: collection pages are critical. For commercial-intent topics, recommend "Collection Page" as contentType where it fits (category/product collections). Still use Blog Post, Landing Page, Long-form Guide, etc. where appropriate; add Collection Page to the mix.
+- When a recommendation is about improving existing content (the client already has a page for this topic but it is underperforming — e.g. low CTR, declining position, or data says "existing page needs optimization"), set "optimizationOpportunity": true. This signals an optimization/refresh opportunity, not net-new content.
 
 OUTPUT FORMAT — respond with ONLY valid JSON, no markdown fences, no preamble:
 {
@@ -53,7 +55,8 @@ OUTPUT FORMAT — respond with ONLY valid JSON, no markdown fences, no preamble:
       "pillar": "Which service pillar this maps to",
       "priority": "High / Medium / Low",
       "searchIntent": "Informational / Commercial / Transactional / Navigational",
-      "contentType": "Blog Post / Landing Page / Long-form Guide / Comparison Page / FAQ Page / Tool Page / Case Study",
+      "contentType": "Blog Post / Landing Page / Long-form Guide / Comparison Page / FAQ Page / Tool Page / Case Study / Collection Page",
+      "optimizationOpportunity": false,
       "rationale": "1-2 sentences explaining exactly which data signals support this topic (e.g., 'Keyword X has 2,400 monthly impressions in GSC but CTR of 1.2% at position 8.3 — a dedicated page could capture significantly more traffic. Competitors A and B both have content on this topic.')",
       "targetKeywords": ["primary keyword", "secondary keyword", "long-tail variant"],
       "estimatedImpact": "Brief note on expected impact — e.g., 'High — striking distance keyword with 2.4K impressions'",
@@ -77,6 +80,7 @@ export async function POST(req: NextRequest) {
   let body: {
     clientName: string;
     clientUrl?: string;
+    clientType?: "ecommerce" | "non-ecommerce";
     pillars: string[];
     gscData?: string;
     semrushClientData?: string;
@@ -95,6 +99,7 @@ export async function POST(req: NextRequest) {
   const {
     clientName,
     clientUrl = "",
+    clientType = "non-ecommerce",
     pillars = [],
     gscData = "",
     semrushClientData = "",
@@ -104,8 +109,20 @@ export async function POST(req: NextRequest) {
     additionalContext = "",
   } = body;
 
+  // Log what was received (shows in Vercel → Logs / local terminal)
+  console.log("[Generate] Request data summary", {
+    clientName,
+    hasGscData: !!gscData,
+    gscDataLength: gscData?.length ?? 0,
+    hasSemrushClient: !!semrushClientData,
+    hasSemrushCompetitor: !!semrushCompetitorData,
+    hasPastCalendars: !!pastCalendars,
+    hasOtherData: !!otherData,
+  });
+
   const userMessage = `Client: ${clientName}
 Website: ${clientUrl}
+Client type: ${clientType === "ecommerce" ? "E-commerce" : "Non-ecommerce"}
 Service Pillars: ${pillars.join(", ")}
 
 ${additionalContext ? "ADDITIONAL CONTEXT FROM THE STRATEGIST:\n" + additionalContext : ""}

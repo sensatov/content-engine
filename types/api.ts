@@ -4,6 +4,8 @@ export type Topic = {
   priority: "High" | "Medium" | "Low";
   searchIntent: string;
   contentType: string;
+  /** True when the topic targets existing content that should be optimized, not net-new. */
+  optimizationOpportunity?: boolean;
   rationale: string;
   targetKeywords: string[];
   estimatedImpact: string;

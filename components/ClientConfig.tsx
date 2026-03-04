@@ -20,6 +20,8 @@ const PILLAR_SUGGESTIONS = [
 export type ClientConfigState = {
   clientName: string;
   clientUrl: string;
+  /** E-commerce vs service/non-ecommerce — affects content type suggestions (e.g. Collection Page). */
+  clientType: "ecommerce" | "non-ecommerce";
   pillars: string[];
 };
 
@@ -65,6 +67,38 @@ export function ClientConfig({ value, onChange }: Props) {
   return (
     <section className="rounded-lg border border-white/10 bg-white/[0.02] p-6 transition-colors hover:border-accent/30">
       <p className="section-label font-mono mb-4">01 — Client Configuration</p>
+      <div className="mb-4">
+        <label className="mb-1.5 block font-mono text-xs text-white/60">
+          Client type
+        </label>
+        <div className="flex gap-0 rounded border border-white/10 bg-black/30 p-0.5">
+          <button
+            type="button"
+            onClick={() => onChange({ ...value, clientType: "non-ecommerce" })}
+            className={`flex-1 rounded px-3 py-2 font-mono text-sm transition-colors ${
+              value.clientType === "non-ecommerce"
+                ? "bg-white/10 text-accent"
+                : "text-white/60 hover:text-white/80"
+            }`}
+          >
+            Non-ecommerce
+          </button>
+          <button
+            type="button"
+            onClick={() => onChange({ ...value, clientType: "ecommerce" })}
+            className={`flex-1 rounded px-3 py-2 font-mono text-sm transition-colors ${
+              value.clientType === "ecommerce"
+                ? "bg-white/10 text-accent"
+                : "text-white/60 hover:text-white/80"
+            }`}
+          >
+            E-commerce
+          </button>
+        </div>
+        <p className="mt-1 text-xs text-white/50">
+          E-commerce clients get Collection Page suggestions for commercial intent where relevant.
+        </p>
+      </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label className="mb-1.5 block font-mono text-xs text-white/60">

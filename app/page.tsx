@@ -32,6 +32,7 @@ export default function ContentEnginePage() {
   const [clientConfig, setClientConfig] = useState<ClientConfigState>({
     clientName: "",
     clientUrl: "",
+    clientType: "non-ecommerce",
     pillars: [],
   });
   const [gscData, setGscData] = useState("");
@@ -69,6 +70,7 @@ export default function ContentEnginePage() {
         body: JSON.stringify({
           clientName: clientConfig.clientName.trim(),
           clientUrl: clientConfig.clientUrl.trim(),
+          clientType: clientConfig.clientType,
           pillars: clientConfig.pillars,
           gscData: gscData || undefined,
           semrushClientData: fileUpload.semrushClient.text || undefined,

@@ -50,6 +50,7 @@ export async function POST(req: NextRequest) {
   const token = (session as { accessToken?: string } | null)?.accessToken;
 
   if (!token) {
+    console.warn("[GSC data] Not authenticated — no session or access token");
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
@@ -84,6 +85,16 @@ export async function POST(req: NextRequest) {
     const periodBLabel = `${periodB.startDate} to ${periodB.endDate}`;
     const formatted = formatGSCDataForAI(rowsA, rowsB, periodALabel, periodBLabel);
 
+    // Log for debugging (shows in Vercel → Logs / local terminal)
+    console.log("[GSC data] Pulled successfully", {
+      siteUrl,
+      periodA: periodALabel,
+      periodB: periodBLabel,
+      rowCountA: rowsA.length,
+      rowCountB: rowsB.length,
+      formattedLength: formatted.length,
+    });
+
     return NextResponse.json({
       formatted,
       rowCount: rowsA.length,
@@ -91,6 +102,7 @@ export async function POST(req: NextRequest) {
       periodB: periodBLabel,
     });
   } catch (e) {
+    console.error("[GSC data] Error:", e instanceof Error ? e.message : e);
     return NextResponse.json(
       { error: e instanceof Error ? e.message : "GSC request failed" },
       { status: 500 }

@@ -3,11 +3,21 @@ import GoogleProvider from "next-auth/providers/google";
 
 const GSC_SCOPE = "https://www.googleapis.com/auth/webmasters.readonly";
 
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value?.trim()) {
+    throw new Error(
+      `NextAuth: ${name} is not set. Add it in Vercel → Settings → Environment Variables (and in Google Cloud for client ID/secret).`
+    );
+  }
+  return value;
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      clientId: requireEnv("GOOGLE_CLIENT_ID"),
+      clientSecret: requireEnv("GOOGLE_CLIENT_SECRET"),
       authorization: {
         params: {
           scope: [
@@ -37,5 +47,5 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/",
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: requireEnv("NEXTAUTH_SECRET"),
 };
