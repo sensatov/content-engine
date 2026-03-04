@@ -44,7 +44,7 @@ export function GSCConnect({ onDataLoaded }: GSCConnectProps) {
   const [state, setState] = useState<GSCState>(() => ({
     siteUrl: "",
     ...getDefaultDates(),
-    rowLimit: 5000,
+    rowLimit: 500,
     formattedData: null,
     rowCount: null,
     periodALabel: null,

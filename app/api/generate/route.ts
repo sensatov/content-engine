@@ -109,6 +109,18 @@ export async function POST(req: NextRequest) {
     additionalContext = "",
   } = body;
 
+  // Keep prompt under 200k token limit: cap each data section (~1 token ≈ 4 chars)
+  const MAX_DATA_CHARS = 25_000;
+  const MAX_CONTEXT_CHARS = 5_000;
+  const truncate = (s: string, max: number) =>
+    s.length <= max ? s : s.slice(0, max) + "\n\n[… truncated for length …]";
+  const gsc = truncate(gscData, MAX_DATA_CHARS);
+  const semrushClient = truncate(semrushClientData, MAX_DATA_CHARS);
+  const semrushCompetitor = truncate(semrushCompetitorData, MAX_DATA_CHARS);
+  const past = truncate(pastCalendars, MAX_DATA_CHARS);
+  const other = truncate(otherData, MAX_DATA_CHARS);
+  const context = truncate(additionalContext, MAX_CONTEXT_CHARS);
+
   // Log what was received (shows in Vercel → Logs / local terminal)
   console.log("[Generate] Request data summary", {
     clientName,
@@ -125,22 +137,22 @@ Website: ${clientUrl}
 Client type: ${clientType === "ecommerce" ? "E-commerce" : "Non-ecommerce"}
 Service Pillars: ${pillars.join(", ")}
 
-${additionalContext ? "ADDITIONAL CONTEXT FROM THE STRATEGIST:\n" + additionalContext : ""}
+${context ? "ADDITIONAL CONTEXT FROM THE STRATEGIST:\n" + context : ""}
 
 === GOOGLE SEARCH CONSOLE DATA (Period Comparison) ===
-${gscData || "(none provided)"}
+${gsc || "(none provided)"}
 
 === SEMRUSH CLIENT DATA ===
-${semrushClientData || "(none provided)"}
+${semrushClient || "(none provided)"}
 
 === SEMRUSH COMPETITOR / KEYWORD GAP DATA ===
-${semrushCompetitorData || "(none provided)"}
+${semrushCompetitor || "(none provided)"}
 
 === PREVIOUS CONTENT CALENDARS ===
-${pastCalendars || "(none provided)"}
+${past || "(none provided)"}
 
 === OTHER SUPPORTING DATA ===
-${otherData || "(none provided)"}
+${other || "(none provided)"}
 
 Based on all of the above data, generate strategic content topic recommendations for next month's content calendar. Every recommendation must be backed by specific data signals from the provided sources.`;
 

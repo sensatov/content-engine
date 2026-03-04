@@ -67,7 +67,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const { siteUrl, periodA, periodB, rowLimit = 5000 } = body;
+  const { siteUrl, periodA, periodB, rowLimit: requestedLimit = 500 } = body;
+  const rowLimit = Math.min(Math.max(1, requestedLimit ?? 500), 500);
   if (!siteUrl || !periodA?.startDate || !periodA?.endDate || !periodB?.startDate || !periodB?.endDate) {
     return NextResponse.json(
       { error: "siteUrl, periodA, and periodB with startDate/endDate are required" },
